@@ -68,6 +68,14 @@ function limparTestes() {
   // Limpa os resultados
   document.getElementById("testes-resultados").textContent = "";
   document.getElementById("teste-resultado-final").innerHTML = "";
+  document.getElementById("resultadoCadastro").innerHTML = "";
+}
+function limparTestesFormulario() {
+  document.getElementById("nome").value = "";
+  document.getElementById("email").value = "";
+  document.getElementById("cpf").value = "";
+  document.getElementById("telefone").value = "";
+  document.getElementById("resultadoCadastro").innerHTML = "";
 }
 const indexbd = [];
 

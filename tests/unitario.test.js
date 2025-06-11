@@ -166,4 +166,8 @@ function exibirResultados(resultados) {
 function executarTestesUnitarios() {
   const resultados = rodarTestesUnitarios();
   exibirResultados(resultados);
+  document.getElementById("nome").value = "";
+  document.getElementById("email").value = "";
+  document.getElementById("cpf").value = "";
+  document.getElementById("telefone").value = "";
 }
