@@ -69,3 +69,28 @@ function limparTestes() {
   document.getElementById("testes-resultados").textContent = "";
   document.getElementById("teste-resultado-final").innerHTML = "";
 }
+const indexbd = [];
+
+const form = document.getElementById('formCadastro');
+const resultado = document.getElementById('resultado');
+
+form.addEventListener('submit', function (e) {
+  e.preventDefault();
+
+  const nome = document.getElementById('nome').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const cpf = document.getElementById('cpf').value.trim();
+  const telefone = document.getElementById('telefone').value.trim();
+
+  if (nome && email && cpf && telefone) {
+    const cliente = { nome, email, cpf, telefone };
+    indexbd.push(cliente);
+    mostrarResultado(`✅ Cliente cadastrado com sucesso:\n${JSON.stringify(cliente, null, 2)}`);
+    form.reset();
+  } else {
+    mostrarResultado('❌ Preencha todos os campos.');
+  }
+});
+function mostrarResultado(mensagem) {
+  resultadoCadastro.innerHTML = mensagem;
+}

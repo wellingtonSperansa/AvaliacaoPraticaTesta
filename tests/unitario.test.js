@@ -67,7 +67,7 @@ function testaCalculo() {
 
   let passou = 0;
   let falhou = 0;
-
+  // forEach é o metododo que executa em callback "uma Linha por vez".
   testes.forEach((teste, index) => {
     // Define valores nos inputs
     document.getElementById("largura").value = teste.largura;
@@ -105,4 +105,65 @@ function testaCalculo() {
   // ✅ Limpa div de resultado individual e input de largura
   document.getElementById("testes-resultados").textContent = "";
   document.getElementById("largura").value = "";
+}
+function preencherFormularioPadrao() {
+  document.getElementById('nome').value = 'João Silva';
+  document.getElementById('email').value = 'joao.silva@example.com';
+  document.getElementById('cpf').value = '12345678901';        // 11 dígitos numéricos
+  document.getElementById('telefone').value = '11987654321';   // 11 dígitos numéricos (comum em SP)
+}
+
+function rodarTestesUnitarios() {
+  preencherFormularioPadrao();
+
+  const nome = document.getElementById('nome').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const cpf = document.getElementById('cpf').value.trim();
+  const telefone = document.getElementById('telefone').value.trim();
+
+  const resultados = {};
+
+  // Teste nome - não contém números e possui mais de 3 caracteres
+  const nomeValido = nome.length >= 3 && !/\d/.test(nome);
+  resultados.nome = nomeValido
+    ? { passou: true, msg: 'Nome: válido, não contém números e possui mais de 3 caracteres.' }
+    : { passou: false, msg: 'Nome: inválido, deve ter mais de 3 caracteres e não conter números.' };
+
+  // Teste email - formato básico
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  resultados.email = emailRegex.test(email)
+    ? { passou: true, msg: 'Email: válido, possui formato correto.' }
+    : { passou: false, msg: 'Email: inválido, formato incorreto.' };
+
+  // Teste CPF - exatamente 11 dígitos numéricos
+  const cpfRegex = /^\d{11}$/;
+  resultados.cpf = cpfRegex.test(cpf)
+    ? { passou: true, msg: 'CPF: válido, contém exatamente 11 dígitos numéricos.' }
+    : { passou: false, msg: 'CPF: inválido, deve conter exatamente 11 dígitos numéricos.' };
+
+  // Teste telefone - mínimo 10 dígitos numéricos
+  const telefoneSoNumeros = telefone.replace(/\D/g, '');
+  resultados.telefone = telefoneSoNumeros.length >= 10
+    ? { passou: true, msg: 'Telefone: válido, possui pelo menos 10 dígitos numéricos.' }
+    : { passou: false, msg: 'Telefone: inválido, deve conter pelo menos 10 dígitos numéricos.' };
+
+  return resultados;
+}
+
+function exibirResultados(resultados) {
+  const resultadoDiv = document.getElementById('resultadoCadastro');
+  const linhas = [];
+
+  for (const key in resultados) {
+    const teste = resultados[key];
+    const prefixo = teste.passou ? '✅' : '❌';
+    linhas.push(`${prefixo} ${teste.msg}`);
+  }
+
+  resultadoDiv.textContent = linhas.join('\n');
+}
+
+function executarTestesUnitarios() {
+  const resultados = rodarTestesUnitarios();
+  exibirResultados(resultados);
 }

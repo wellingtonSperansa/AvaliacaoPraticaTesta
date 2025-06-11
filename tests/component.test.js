@@ -80,3 +80,71 @@ function testarComponentes() {
   resultado.innerHTML = mensagens.join("<br>") + `<br><br><strong>Resumo:</strong> ${passou} passaram, ${falhou} falharam.`;
   resultado.style.color = falhou > 0 ? "red" : "green";
 }
+function rodarTestesComponentes() {
+  const componentes = [
+    { id: 'nome', nome: 'Input Nome Completo', esperado: { tag: 'INPUT', type: 'text' } },
+    { id: 'email', nome: 'Input Email', esperado: { tag: 'INPUT', type: 'email' } },
+    { id: 'cpf', nome: 'Input CPF', esperado: { tag: 'INPUT', type: 'text' } },
+    { id: 'telefone', nome: 'Input Telefone', esperado: { tag: 'INPUT', type: 'text' } },
+    { id: 'btnCadastrar', nome: 'Botão Cadastrar Cliente', esperado: { tag: 'BUTTON', type: 'submit' } },
+    { id: 'testUnit', nome: 'Botão Teste Unitário', esperado: { tag: 'BUTTON', type: 'button' } },
+    { id: 'testComponent', nome: 'Botão Teste de Componente', esperado: { tag: 'BUTTON', type: 'button' } }
+  ];
+
+  const resultados = {};
+
+  componentes.forEach(c => {
+    const el = document.getElementById(c.id);
+
+    if (!el) {
+      resultados[c.id] = {
+        passou: false,
+        msg: `${c.nome}: não encontrado no DOM.`
+      };
+      return;
+    }
+
+    // Valida tag
+    if (el.tagName !== c.esperado.tag) {
+      resultados[c.id] = {
+        passou: false,
+        msg: `${c.nome}: tag incorreta (esperado ${c.esperado.tag}, encontrado ${el.tagName}).`
+      };
+      return;
+    }
+
+    // Valida tipo (para inputs e botões)
+    if (el.type !== c.esperado.type) {
+      resultados[c.id] = {
+        passou: false,
+        msg: `${c.nome}: type incorreto (esperado "${c.esperado.type}", encontrado "${el.type}").`
+      };
+      return;
+    }
+
+    resultados[c.id] = {
+      passou: true,
+      msg: `${c.nome}: presente com tag e type corretos.`
+    };
+  });
+
+  return resultados;
+}
+
+function exibirResultadosComponentes(resultados) {
+  const resultadoDiv = document.getElementById('resultadoCadastro');
+  const linhas = [];
+
+  for (const key in resultados) {
+    const teste = resultados[key];
+    const prefixo = teste.passou ? '✅' : '❌';
+    linhas.push(`${prefixo} ${teste.msg}`);
+  }
+
+  resultadoDiv.textContent = linhas.join('\n');
+}
+
+function executarTestesComponentes() {
+  const resultados = rodarTestesComponentes();
+  exibirResultadosComponentes(resultados);
+}
